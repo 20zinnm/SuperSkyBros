@@ -172,6 +172,7 @@ public class CommandManager implements TabExecutor {
         // Current clist can only be run as a player
         if (!(cs instanceof Player)) {
             plugin.getLogger().severe(mm.noConsole());
+            sender.sendMessage("Oops! Only in-game players may use this command!")
             return true;
         }
 
@@ -180,15 +181,21 @@ public class CommandManager implements TabExecutor {
 
 
         if (plugin.getConfig().contains(player.getWorld().getName())) {
-            player.sendMessage(mm.getErrorMessage("command.message.worldOnBlackList"));
-            plugin.getLogger().info("You can not run commands in world " + player.getWorld().getName() + " as the world is on the world blacklist remove it from config.yml");
+            player.sendMessage("You can not run this commands in world " + player.getWorld().getName() + " as the world is on the world blacklist. If you think this is in error, ask a server admin for assistance.");
+            plugin.getLogger().info(player.getName() + " tried to use a command in a blacklisted world.";
             return true;
         }
 
         if (strings == null || strings.length < 1L) {
 
-            player.sendMessage(ChatColor.DARK_RED + "No arguments passed");
-            return false;
+            player.sendMessage(ChatColor.DARK_BLUE + "---SSB Help---");
+            player.sendMessage(ChatColor.DARK_RED + "/ssb- base command");
+            player.sendMessage(ChatColor.DARK_RED + "/ssb join [arena]- join an arena!");
+            player.sendMessage(ChatColor.DARK_RED + "/ssb leave- leave your current arena.");
+            player.sendMessage(ChatColor.DARK_RED + "/ssb help- open up this help page again");
+
+    
+            return true;
         }
 
         String sub = strings[0];
@@ -214,7 +221,7 @@ public class CommandManager implements TabExecutor {
         // Check correct args are passed if not send usage
         if ((!subCom.mNode.equalsIgnoreCase("set")) && strings.length != subCom.getNumArgs()) {
 
-            send(player, ChatColor.DARK_RED + "Usage: " + subCom.getUseage());
+            send(player, ChatColor.DARK_RED + "Usage: " + subCom.getUsage());
             return true;
         }
 
@@ -285,7 +292,7 @@ public class CommandManager implements TabExecutor {
             return true;
         }
 
-        plugin.getLogger().severe("Unknown error command: /" + sb.getLabel() + " did not register at all. Investigation needed");
+        plugin.getLogger().severe("Unknown error on command: /" + sb.getLabel() + " did not register at all. Investigation needed");
 
         return false;
 
